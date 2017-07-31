@@ -22,9 +22,9 @@ There are some variations on the way 99 is played.  But this is how my family pl
 
 The game of 99 will require :
 
-- [ ] Card, HumanPlayer, ComputerPlayer, Game, and View classes
-- [ ] A human player who can pick a card in there hand to play and receive new cards from the deck
-- [ ] Artificial Intelligence (bent on defeating human)
+  -[ ] Card, HumanPlayer, ComputerPlayer, Game, and View classes
+  -[ ] A human player who can pick a card in there hand to play and receive new cards from the deck
+  -[ ] Artificial Intelligence (bent on defeating human)
 
 In addition, this project will include:
 
@@ -32,10 +32,14 @@ In addition, this project will include:
 
 ### Wireframes
 
-This app will consist of a single screen with game board, game controls, and nav links to the Github, my LinkedIn,
-and the About modal.  Game controls will include Start, Stop, and Reset buttons as well as a slider to control the speed.  On the left, three clickable shapes will be used to toggle between the types of grids available.  On the right, there will be three (or more) clickable gradient-filled rectangles used to toggle between color schemes (see Bonus Features).  Additionally, a drop-down will be added to the Controls to toggle between different rule sets (again, see Bonus Features).
+This game will be a single screen.  It will render a hand of visible cards for the Human player as a well as 2
+facedown hands for the Computer Players. Cards will travel from too and from the discard pile as well from the deck.
+Computer players will slightly light up when it is their turn and grey out if they get defeated. We will also render a
+give up button.  The remaining surviving player should mock the player for losing before the game gets reset.
 
-![wireframes](images/js_wireframe.jpeg)
+Magic cards will not be explained in the rules but will give brief explanation on the card itself
+
+![wireframes](Docs/WireFrame.png)
 
 ### Architecture and Technologies
 
@@ -54,9 +58,11 @@ In addition to the webpack entry file, there will be three scripts involved in t
 
 ### Implementation Timeline
 
-**Day 1**: write the bluk of underlining logic and set up enviroment
+**Day 1**: write the bulk of underlining logic and set up environment
 
-  Create `webpack.config.js` as well as `package.json`.  Write a basic entry file and the bare bones of all 3 scripts outlined above.  Learn the basics of `Easel.js`.  Goals for the day:
+  Create `webpack.config.js` as well as `package.json`.  Write a basic entry file.
+
+  Write the Game, Player, and Card Logic
 
 - Write the basic game logic
 - Learn enough `Easel.js` to render an object to the `Canvas` element
@@ -78,7 +84,6 @@ Dedicate this day to learning the `Easel.js` API.  Card object to connect to the
 - Instructions
 
 
-
 **Day 4**: Style the frontend, making it polished and professional.
 
 - Have a styled `Canvas`, nice looking controls and title
@@ -91,8 +96,8 @@ There are many directions this cellular automata engine could eventually go.  So
 
 - [ ] Fire works if you win/ slime if you loose?
 - [ ] Glowy effects on magic cards
-- [ ] Computer players who express displeasure when losing
-- [ ] Computer players who gloats when they win   
+- [ ] Computer players express displeasure when losing
+- [ ] Computer players gloats when they win   
 - [ ] Cards that cant be played get greyed out
 - [ ] Different computer players (difficulty/personality)
 - [ ] Different backgrounds
