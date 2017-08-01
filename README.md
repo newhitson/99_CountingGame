@@ -22,9 +22,10 @@ There are some variations on the way 99 is played.  But this is how my family pl
 
 The game of 99 will require :
 
-  -[ ] Card, HumanPlayer, ComputerPlayer, Game, and View classes
-  -[ ] A human player who can pick a card in there hand to play and receive new cards from the deck
-  -[ ] Artificial Intelligence (bent on defeating human)
+  -[ ] Human Player can receive cards in there hand, play them and the count will increase
+  -[ ] Artificial Intelligence makes smart plays
+  -[ ] Game logic tracks turns and keeps the game running 
+  -[ ] game will keep a running score of multiple games
 
 In addition, this project will include:
 
