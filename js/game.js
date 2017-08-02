@@ -1,84 +1,8 @@
+const Card = require("./card");
+const Deck = require("./deck");
+const HumanPlayer = require("./human_player");
+const ComputerPlayer = require("./computer_player")
 
-
-class Card {
-  constructor(suit,value) {
-    this.suit = suit;
-    this.value = value;
-    this.name = this.value + this.suit
-  }
-  listItem(){
-    var el = document.createElement('li')
-    el.innerText = this.name
-    return el
-  }
-  gameValue(){
-    const gameValues = {'A':1,'2':2,'3':3,'4':0,'5':5,'6':6,'7':7,'8':8,'9':0,
-                        '10':-10,'J':0,'Q':10,'K':10}
-    return gameValues[this.value]
-  }
-
-}
-
-
- class Deck {
-   constructor(){
-     this.values = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-     this.suits = ['H','D','S','C'];
-     this.cards = [];
-
-     for (var s = 0; s < this.suits.length; s++) {
-       for (var v = 0; v < this.values.length; v++) {
-         this.cards.push( new Card( this.suits[s], this.values[v] ))
-       }
-     }
-     this.cards = this.shuffle(this.cards);
-  };
-
-  shuffle(a) {
-   for (let i = a.length; i; i--) {
-       let j = Math.floor(Math.random() * i);
-       [a[i - 1], a[j]] = [a[j], a[i - 1]];
-   }
-   return a;
- }
-
-  take(n){
-   let taken = [];
-   for (var i = 0; i < n; i++) {
-     taken.push(this.cards.shift());
-   }
-   return taken;
-   //returns cards in a array
-  }
- }
-
- class HumanPlayer{
-   constructor(startinghand){
-     this.hand = startinghand;
-   }
-
-   playCard(pos, newcard){
-     let playedCard = this.hand.splice(pos,1, newcard[0])
-     return playedCard
-   };
- }
-
- class ComputerPlayer{
-   constructor(startinghand){
-     this.hand = startinghand
-   }
-
-   takeTurn(count){
-     console.log(count);
-     for (var i = 0; i < this.hand.length; i++) {
-       if( ~~this.hand[i].gameValue() + count < 100 ) {
-         let play = this.hand.splice(i,1)
-         return play[0]
-       }
-     }
-     return "bust"
-   };
- }
 
 
 class Game{
@@ -103,13 +27,20 @@ class Game{
 
     if( (x>137 && y>530) && (x<232 && y<629) ){
       let playedCard = this.human.playCard(0,this.deck.take(1))
-      console.log(playedCard);
+      this.addToCount(playedCard.gameValue())
+      this.renderHand(this.human.hand)
       ;
     }
     if( (x>240 && y>530) && (x<336 && y<629) ){
-      alert("card2 was clicked!");}
+      let playedCard = this.human.playCard(1,this.deck.take(1))
+      this.addToCount(playedCard.gameValue())
+      this.renderHand(this.human.hand)
+      }
     if( (x>339 && y>530) && (x<437 && y<629) ){
-      alert("card3 was clicked!");}
+      let playedCard = this.human.playCard(2,this.deck.take(1))
+      this.addToCount(playedCard.gameValue())
+      this.renderHand(this.human.hand)
+      }
 
   }
 
@@ -141,6 +72,13 @@ class Game{
   //   }
   // }
 
+  addToCount(value){
+    console.log(value);
+    this.count = this.count + value
+    this.ctx.font = '48px serif';
+    this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.ctx.fillText(`${this.count}`, 470, 100);
+  }
   startGame(){
     this.renderHand(this.human.hand);
     console.log(this.human.hand);

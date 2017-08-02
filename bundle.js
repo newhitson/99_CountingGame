@@ -92,6 +92,145 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var Card = __webpack_require__(2);
+var Deck = __webpack_require__(3);
+var HumanPlayer = __webpack_require__(4);
+var ComputerPlayer = __webpack_require__(5);
+
+var Game = function () {
+  function Game(ctx, canvasEl) {
+    var _this = this;
+
+    _classCallCheck(this, Game);
+
+    this.deck = new Deck();
+    this.count = 0;
+    // this.humanPlayer = new HumanPlayer(this.deck.take(3));
+    this.computer1 = new ComputerPlayer(this.deck.take(3));
+    this.computer2 = new ComputerPlayer(this.deck.take(3));
+    this.human = new HumanPlayer(this.deck.take(3));
+    this.turnorder = [this.computer1, this.computer2];
+    this.ctx = ctx;
+    this.canvasEl = canvasEl;
+    this.canvasEl.addEventListener("click", function (evt) {
+      return _this.showCoords(evt);
+    });
+    // this.renderHand = this.renderHand.bind(this)
+    // this.humanPlayer,
+  }
+
+  _createClass(Game, [{
+    key: "showCoords",
+    value: function showCoords(event) {
+      var x = event.clientX;
+      var y = event.clientY;
+
+      if (x > 137 && y > 530 && x < 232 && y < 629) {
+        var playedCard = this.human.playCard(0, this.deck.take(1));
+        this.addToCount(playedCard.gameValue());
+        this.renderHand(this.human.hand);
+      }
+      if (x > 240 && y > 530 && x < 336 && y < 629) {
+        var _playedCard = this.human.playCard(1, this.deck.take(1));
+        this.addToCount(_playedCard.gameValue());
+        this.renderHand(this.human.hand);
+      }
+      if (x > 339 && y > 530 && x < 437 && y < 629) {
+        var _playedCard2 = this.human.playCard(2, this.deck.take(1));
+        this.addToCount(_playedCard2.gameValue());
+        this.renderHand(this.human.hand);
+      }
+    }
+
+    // startGame(){
+    //   while(this.turnorder.length > 1){
+    //     let currentPlayer = this.turnorder.pop()
+    //     let play = currentPlayer.takeTurn(this.count)
+    //     if (play === "bust") { console.log("busted");} else {
+    //       switch (play.value) {
+    //         case '4':
+    //         console.log();
+    //           this.turnorder.reverse();
+    //           break;
+    //         case 'J':
+    //           console.log("jack");
+    //           this.count = 99
+    //           break;
+    //         default:
+    //       }
+    //       this.count = this.count + play.gameValue()
+    //       currentPlayer.hand.push(this.deck.take(1)[0])
+    //       this.turnorder.unshift(currentPlayer)
+    //       this.ctx.font = '48px serif';
+    //       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //       this.ctx.fillText(`${this.count}`, 470, 100);
+    //       this.renderHand();
+    //     }
+    //   }
+    // }
+
+  }, {
+    key: "addToCount",
+    value: function addToCount(value) {
+      console.log(value);
+      this.count = this.count + value;
+      this.ctx.font = '48px serif';
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.ctx.fillText("" + this.count, 470, 100);
+    }
+  }, {
+    key: "startGame",
+    value: function startGame() {
+      this.renderHand(this.human.hand);
+      console.log(this.human.hand);
+    }
+  }, {
+    key: "renderHand",
+    value: function renderHand(hand) {
+      console.log(hand.length);
+      var cardimg = new Image();
+      cardimg.src = "./PNG/" + hand[0].name + ".png";
+      cardimg.onload = function () {
+        this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
+      }.bind(this);
+
+      var cardimg2 = new Image();
+      cardimg2.src = "./PNG/" + hand[1].name + ".png";
+      cardimg2.onload = function () {
+        this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
+      }.bind(this);
+
+      var cardimg3 = new Image();
+      cardimg3.src = "./PNG/" + hand[2].name + ".png";
+      cardimg3.onload = function () {
+        this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
+      }.bind(this);
+
+      // let cardimg = new Image();
+      // cardimg.src = './png/base.png'
+      // cardimg.onload = function(){
+      //   this.ctx.drawImage(cardimg, 0, 0);
+      //
+      // }.bind(this);
+    }
+  }]);
+
+  return Game;
+}();
+
+module.exports = Game;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var Card = function () {
   function Card(suit, value) {
     _classCallCheck(this, Card);
@@ -119,6 +258,21 @@ var Card = function () {
 
   return Card;
 }();
+
+module.exports = Card;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Card = __webpack_require__(2);
 
 var Deck = function () {
   function Deck() {
@@ -162,6 +316,19 @@ var Deck = function () {
   return Deck;
 }();
 
+module.exports = Deck;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var HumanPlayer = function () {
   function HumanPlayer(startinghand) {
     _classCallCheck(this, HumanPlayer);
@@ -170,15 +337,28 @@ var HumanPlayer = function () {
   }
 
   _createClass(HumanPlayer, [{
-    key: 'playCard',
+    key: "playCard",
     value: function playCard(pos, newcard) {
       var playedCard = this.hand.splice(pos, 1, newcard[0]);
-      return playedCard;
+      return playedCard[0];
     }
   }]);
 
   return HumanPlayer;
 }();
+
+module.exports = HumanPlayer;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ComputerPlayer = function () {
   function ComputerPlayer(startinghand) {
@@ -188,9 +368,8 @@ var ComputerPlayer = function () {
   }
 
   _createClass(ComputerPlayer, [{
-    key: 'takeTurn',
+    key: "takeTurn",
     value: function takeTurn(count) {
-      console.log(count);
       for (var i = 0; i < this.hand.length; i++) {
         if (~~this.hand[i].gameValue() + count < 100) {
           var play = this.hand.splice(i, 1);
@@ -204,115 +383,7 @@ var ComputerPlayer = function () {
   return ComputerPlayer;
 }();
 
-var Game = function () {
-  function Game(ctx, canvasEl) {
-    var _this = this;
-
-    _classCallCheck(this, Game);
-
-    this.deck = new Deck();
-    this.count = 0;
-    // this.humanPlayer = new HumanPlayer(this.deck.take(3));
-    this.computer1 = new ComputerPlayer(this.deck.take(3));
-    this.computer2 = new ComputerPlayer(this.deck.take(3));
-    this.human = new HumanPlayer(this.deck.take(3));
-    this.turnorder = [this.computer1, this.computer2];
-    this.ctx = ctx;
-    this.canvasEl = canvasEl;
-    this.canvasEl.addEventListener("click", function (evt) {
-      return _this.showCoords(evt);
-    });
-    // this.renderHand = this.renderHand.bind(this)
-    // this.humanPlayer,
-  }
-
-  _createClass(Game, [{
-    key: 'showCoords',
-    value: function showCoords(event) {
-      var x = event.clientX;
-      var y = event.clientY;
-
-      if (x > 137 && y > 530 && x < 232 && y < 629) {
-        var playedCard = this.human.playCard(0, this.deck.take(1));
-        console.log(playedCard);
-        ;
-      }
-      if (x > 240 && y > 530 && x < 336 && y < 629) {
-        alert("card2 was clicked!");
-      }
-      if (x > 339 && y > 530 && x < 437 && y < 629) {
-        alert("card3 was clicked!");
-      }
-    }
-
-    // startGame(){
-    //   while(this.turnorder.length > 1){
-    //     let currentPlayer = this.turnorder.pop()
-    //     let play = currentPlayer.takeTurn(this.count)
-    //     if (play === "bust") { console.log("busted");} else {
-    //       switch (play.value) {
-    //         case '4':
-    //         console.log();
-    //           this.turnorder.reverse();
-    //           break;
-    //         case 'J':
-    //           console.log("jack");
-    //           this.count = 99
-    //           break;
-    //         default:
-    //       }
-    //       this.count = this.count + play.gameValue()
-    //       currentPlayer.hand.push(this.deck.take(1)[0])
-    //       this.turnorder.unshift(currentPlayer)
-    //       this.ctx.font = '48px serif';
-    //       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //       this.ctx.fillText(`${this.count}`, 470, 100);
-    //       this.renderHand();
-    //     }
-    //   }
-    // }
-
-  }, {
-    key: 'startGame',
-    value: function startGame() {
-      this.renderHand(this.human.hand);
-      console.log(this.human.hand);
-    }
-  }, {
-    key: 'renderHand',
-    value: function renderHand(hand) {
-      console.log(hand.length);
-      var cardimg = new Image();
-      cardimg.src = './PNG/' + hand[0].name + '.png';
-      cardimg.onload = function () {
-        this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
-      }.bind(this);
-
-      var cardimg2 = new Image();
-      cardimg2.src = './PNG/' + hand[1].name + '.png';
-      cardimg2.onload = function () {
-        this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
-      }.bind(this);
-
-      var cardimg3 = new Image();
-      cardimg3.src = './PNG/' + hand[2].name + '.png';
-      cardimg3.onload = function () {
-        this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
-      }.bind(this);
-
-      // let cardimg = new Image();
-      // cardimg.src = './png/base.png'
-      // cardimg.onload = function(){
-      //   this.ctx.drawImage(cardimg, 0, 0);
-      //
-      // }.bind(this);
-    }
-  }]);
-
-  return Game;
-}();
-
-module.exports = Game;
+module.exports = ComputerPlayer;
 
 /***/ })
 /******/ ]);
