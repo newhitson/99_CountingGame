@@ -74,11 +74,11 @@ var Game = __webpack_require__(1);
 
 document.addEventListener("DOMContentLoaded", function () {
   var canvasEl = document.getElementsByTagName("canvas")[0];
-  canvasEl.width = 627;
-  canvasEl.height = 940;
+  canvasEl.width = 940;
+  canvasEl.height = 627;
 
   var ctx = canvasEl.getContext("2d");
-  var game = new Game();
+  var game = new Game(ctx).startGame();
 });
 
 /***/ }),
@@ -188,7 +188,6 @@ var ComputerPlayer = function () {
     key: 'takeTurn',
     value: function takeTurn(count) {
       console.log(count);
-      debugger;
       for (var i = 0; i < this.hand.length; i++) {
         if (~~this.hand[i].gameValue() + count < 100) {
           var play = this.hand.splice(i, 1);
@@ -203,7 +202,7 @@ var ComputerPlayer = function () {
 }();
 
 var Game = function () {
-  function Game() {
+  function Game(ctx) {
     _classCallCheck(this, Game);
 
     this.deck = new Deck();
@@ -212,7 +211,9 @@ var Game = function () {
     this.computer1 = new ComputerPlayer(this.deck.take(3));
     this.computer2 = new ComputerPlayer(this.deck.take(3));
     this.human = new HumanPlayer(this.deck.take(3));
-    this.turnorder = [this.computer1, this.human, this.computer2];
+    this.turnorder = [this.computer1, this.computer2];
+    this.ctx = ctx;
+    // this.renderHand = this.renderHand.bind(this)
     // this.humanPlayer,
   }
 
@@ -239,13 +240,28 @@ var Game = function () {
           this.count = this.count + play.gameValue();
           currentPlayer.hand.push(this.deck.take(1)[0]);
           this.turnorder.unshift(currentPlayer);
+          this.ctx.font = '48px serif';
+          this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+          this.ctx.fillText('' + this.count, 470, 100);
+          this.renderHand();
         }
       }
+    }
+  }, {
+    key: 'renderHand',
+    value: function renderHand() {
+      var cardimg = new Image();
+      cardimg.src = './img/base.png';
+      cardimg.onload = function () {
+        this.ctx.drawImage(cardimg, 0, 0);
+      }.bind(this);
     }
   }]);
 
   return Game;
 }();
+
+module.exports = Game;
 
 /***/ })
 /******/ ]);

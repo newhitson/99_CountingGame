@@ -69,7 +69,6 @@ class Card {
 
    takeTurn(count){
      console.log(count);
-     debugger;
      for (var i = 0; i < this.hand.length; i++) {
        if( ~~this.hand[i].gameValue() + count < 100 ) {
          let play = this.hand.splice(i,1)
@@ -82,14 +81,16 @@ class Card {
 
 
 class Game{
-  constructor(){
+  constructor(ctx){
     this.deck = new Deck;
     this.count = 0;
     // this.humanPlayer = new HumanPlayer(this.deck.take(3));
     this.computer1 = new ComputerPlayer(this.deck.take(3));
     this.computer2 = new ComputerPlayer(this.deck.take(3));
     this.human = new HumanPlayer(this.deck.take(3));
-    this.turnorder = [this.computer1,this.human, this.computer2 ];
+    this.turnorder = [this.computer1, this.computer2 ];
+    this.ctx = ctx;
+    // this.renderHand = this.renderHand.bind(this)
     // this.humanPlayer,
   }
 
@@ -112,8 +113,23 @@ class Game{
         this.count = this.count + play.gameValue()
         currentPlayer.hand.push(this.deck.take(1)[0])
         this.turnorder.unshift(currentPlayer)
+        this.ctx.font = '48px serif';
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.fillText(`${this.count}`, 470, 100);
+        this.renderHand();
       }
     }
   }
 
+  renderHand(){
+    let cardimg = new Image();
+    cardimg.src = './img/base.png'
+    cardimg.onload = function(){
+      this.ctx.drawImage(cardimg, 0, 0);
+
+    }.bind(this);
+
+  }
+
 }
+module.exports = Game;
