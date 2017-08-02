@@ -113,33 +113,95 @@ var Game = function () {
     this.ctx = ctx;
     this.canvasEl = canvasEl;
     this.canvasEl.addEventListener("click", function (evt) {
-      return _this.showCoords(evt);
+      return _this.clickOnCard(evt);
     });
     // this.renderHand = this.renderHand.bind(this)
     // this.humanPlayer,
   }
 
   _createClass(Game, [{
-    key: "showCoords",
-    value: function showCoords(event) {
+    key: "startGame",
+    value: function startGame() {
+      this.renderHand(this.human.hand);
+    }
+  }, {
+    key: "addToCount",
+    value: function addToCount(card) {
+      console.log(card.value);
+      var value = void 0;
+
+      if (card.value === 'J') {
+        value = 99 - this.count;
+      } else {
+        value = card.gameValue();
+      }
+
+      this.count = this.count + value;
+      this.ctx.font = '48px serif';
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.ctx.fillText("" + this.count, 470, 100);
+      this.renderHand(this.human.hand);
+    }
+  }, {
+    key: "renderHand",
+    value: function renderHand(hand) {
+      var cardimg = new Image();
+      cardimg.src = "./PNG/" + hand[0].name + ".png";
+      cardimg.onload = function () {
+        this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
+      }.bind(this);
+
+      var cardimg2 = new Image();
+      cardimg2.src = "./PNG/" + hand[1].name + ".png";
+      cardimg2.onload = function () {
+        this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
+      }.bind(this);
+
+      var cardimg3 = new Image();
+      cardimg3.src = "./PNG/" + hand[2].name + ".png";
+      cardimg3.onload = function () {
+        this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
+      }.bind(this);
+    }
+  }, {
+    key: "clickOnCard",
+    value: function clickOnCard(event) {
       var x = event.clientX;
       var y = event.clientY;
 
       if (x > 137 && y > 530 && x < 232 && y < 629) {
         var playedCard = this.human.playCard(0, this.deck.take(1));
-        this.addToCount(playedCard.gameValue());
+        this.addToCount(playedCard);
         this.renderHand(this.human.hand);
+        setTimeout(function () {
+          this.computerPlayerTurn();
+        }.bind(this), 1000);
+        ;
       }
       if (x > 240 && y > 530 && x < 336 && y < 629) {
         var _playedCard = this.human.playCard(1, this.deck.take(1));
-        this.addToCount(_playedCard.gameValue());
+        this.addToCount(_playedCard);
         this.renderHand(this.human.hand);
+        setTimeout(function () {
+          this.computerPlayerTurn();
+        }.bind(this), 1000);
       }
       if (x > 339 && y > 530 && x < 437 && y < 629) {
         var _playedCard2 = this.human.playCard(2, this.deck.take(1));
-        this.addToCount(_playedCard2.gameValue());
+        this.addToCount(_playedCard2);
         this.renderHand(this.human.hand);
+        setTimeout(function () {
+          this.computerPlayerTurn();
+        }.bind(this), 1000);
       }
+    }
+  }, {
+    key: "computerPlayerTurn",
+    value: function computerPlayerTurn() {
+
+      var playedCard = this.computer1.takeTurn(this.count);
+      this.addToCount(playedCard);
+      this.computer1.receiveCard(this.deck.take(1));
     }
 
     // startGame(){
@@ -169,50 +231,7 @@ var Game = function () {
     //   }
     // }
 
-  }, {
-    key: "addToCount",
-    value: function addToCount(value) {
-      console.log(value);
-      this.count = this.count + value;
-      this.ctx.font = '48px serif';
-      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-      this.ctx.fillText("" + this.count, 470, 100);
-    }
-  }, {
-    key: "startGame",
-    value: function startGame() {
-      this.renderHand(this.human.hand);
-      console.log(this.human.hand);
-    }
-  }, {
-    key: "renderHand",
-    value: function renderHand(hand) {
-      console.log(hand.length);
-      var cardimg = new Image();
-      cardimg.src = "./PNG/" + hand[0].name + ".png";
-      cardimg.onload = function () {
-        this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
-      }.bind(this);
 
-      var cardimg2 = new Image();
-      cardimg2.src = "./PNG/" + hand[1].name + ".png";
-      cardimg2.onload = function () {
-        this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
-      }.bind(this);
-
-      var cardimg3 = new Image();
-      cardimg3.src = "./PNG/" + hand[2].name + ".png";
-      cardimg3.onload = function () {
-        this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
-      }.bind(this);
-
-      // let cardimg = new Image();
-      // cardimg.src = './png/base.png'
-      // cardimg.onload = function(){
-      //   this.ctx.drawImage(cardimg, 0, 0);
-      //
-      // }.bind(this);
-    }
   }]);
 
   return Game;
@@ -373,10 +392,16 @@ var ComputerPlayer = function () {
       for (var i = 0; i < this.hand.length; i++) {
         if (~~this.hand[i].gameValue() + count < 100) {
           var play = this.hand.splice(i, 1);
+          console.log(play[0]);
           return play[0];
         }
       }
       return "bust";
+    }
+  }, {
+    key: "receiveCard",
+    value: function receiveCard(card) {
+      this.hand.push(card[0]);
     }
   }]);
 
