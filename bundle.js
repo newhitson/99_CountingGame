@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
   canvasEl.height = 627;
 
   var ctx = canvasEl.getContext("2d");
-  var game = new Game(ctx).startGame();
+  var game = new Game(ctx, canvasEl).startGame();
 });
 
 /***/ }),
@@ -98,7 +98,7 @@ var Card = function () {
 
     this.suit = suit;
     this.value = value;
-    this.name = this.value + " of " + this.suit;
+    this.name = this.value + this.suit;
   }
 
   _createClass(Card, [{
@@ -125,7 +125,7 @@ var Deck = function () {
     _classCallCheck(this, Deck);
 
     this.values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
-    this.suits = ['Heart', 'Diamond', 'Spade', 'Club'];
+    this.suits = ['H', 'D', 'S', 'C'];
     this.cards = [];
 
     for (var s = 0; s < this.suits.length; s++) {
@@ -170,8 +170,11 @@ var HumanPlayer = function () {
   }
 
   _createClass(HumanPlayer, [{
-    key: 'takeTurn',
-    value: function takeTurn(count) {}
+    key: 'playCard',
+    value: function playCard(pos, newcard) {
+      var playedCard = this.hand.splice(pos, 1, newcard[0]);
+      return playedCard;
+    }
   }]);
 
   return HumanPlayer;
@@ -202,7 +205,9 @@ var ComputerPlayer = function () {
 }();
 
 var Game = function () {
-  function Game(ctx) {
+  function Game(ctx, canvasEl) {
+    var _this = this;
+
     _classCallCheck(this, Game);
 
     this.deck = new Deck();
@@ -213,48 +218,94 @@ var Game = function () {
     this.human = new HumanPlayer(this.deck.take(3));
     this.turnorder = [this.computer1, this.computer2];
     this.ctx = ctx;
+    this.canvasEl = canvasEl;
+    this.canvasEl.addEventListener("click", function (evt) {
+      return _this.showCoords(evt);
+    });
     // this.renderHand = this.renderHand.bind(this)
     // this.humanPlayer,
   }
 
   _createClass(Game, [{
+    key: 'showCoords',
+    value: function showCoords(event) {
+      var x = event.clientX;
+      var y = event.clientY;
+
+      if (x > 137 && y > 530 && x < 232 && y < 629) {
+        var playedCard = this.human.playCard(0, this.deck.take(1));
+        console.log(playedCard);
+        ;
+      }
+      if (x > 240 && y > 530 && x < 336 && y < 629) {
+        alert("card2 was clicked!");
+      }
+      if (x > 339 && y > 530 && x < 437 && y < 629) {
+        alert("card3 was clicked!");
+      }
+    }
+
+    // startGame(){
+    //   while(this.turnorder.length > 1){
+    //     let currentPlayer = this.turnorder.pop()
+    //     let play = currentPlayer.takeTurn(this.count)
+    //     if (play === "bust") { console.log("busted");} else {
+    //       switch (play.value) {
+    //         case '4':
+    //         console.log();
+    //           this.turnorder.reverse();
+    //           break;
+    //         case 'J':
+    //           console.log("jack");
+    //           this.count = 99
+    //           break;
+    //         default:
+    //       }
+    //       this.count = this.count + play.gameValue()
+    //       currentPlayer.hand.push(this.deck.take(1)[0])
+    //       this.turnorder.unshift(currentPlayer)
+    //       this.ctx.font = '48px serif';
+    //       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //       this.ctx.fillText(`${this.count}`, 470, 100);
+    //       this.renderHand();
+    //     }
+    //   }
+    // }
+
+  }, {
     key: 'startGame',
     value: function startGame() {
-      while (this.turnorder.length > 1) {
-        var currentPlayer = this.turnorder.pop();
-        var play = currentPlayer.takeTurn(this.count);
-        if (play === "bust") {
-          console.log("busted");
-        } else {
-          switch (play.value) {
-            case '4':
-              console.log();
-              this.turnorder.reverse();
-              break;
-            case 'J':
-              console.log("jack");
-              this.count = 99;
-              break;
-            default:
-          }
-          this.count = this.count + play.gameValue();
-          currentPlayer.hand.push(this.deck.take(1)[0]);
-          this.turnorder.unshift(currentPlayer);
-          this.ctx.font = '48px serif';
-          this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-          this.ctx.fillText('' + this.count, 470, 100);
-          this.renderHand();
-        }
-      }
+      this.renderHand(this.human.hand);
+      console.log(this.human.hand);
     }
   }, {
     key: 'renderHand',
-    value: function renderHand() {
+    value: function renderHand(hand) {
+      console.log(hand.length);
       var cardimg = new Image();
-      cardimg.src = './img/base.png';
+      cardimg.src = './PNG/' + hand[0].name + '.png';
       cardimg.onload = function () {
-        this.ctx.drawImage(cardimg, 0, 0);
+        this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
       }.bind(this);
+
+      var cardimg2 = new Image();
+      cardimg2.src = './PNG/' + hand[1].name + '.png';
+      cardimg2.onload = function () {
+        this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
+      }.bind(this);
+
+      var cardimg3 = new Image();
+      cardimg3.src = './PNG/' + hand[2].name + '.png';
+      cardimg3.onload = function () {
+        this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
+      }.bind(this);
+
+      // let cardimg = new Image();
+      // cardimg.src = './png/base.png'
+      // cardimg.onload = function(){
+      //   this.ctx.drawImage(cardimg, 0, 0);
+      //
+      // }.bind(this);
     }
   }]);
 
