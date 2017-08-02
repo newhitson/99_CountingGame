@@ -13,7 +13,7 @@ class Game{
     this.computer1 = new ComputerPlayer(this.deck.take(3));
     this.computer2 = new ComputerPlayer(this.deck.take(3));
     this.human = new HumanPlayer(this.deck.take(3));
-    this.turnorder = [this.computer1, this.computer2 ];
+    this.turnorder = [this.human, this.computer1, this.computer2 ];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
     this.canvasEl.addEventListener("click", evt => this.clickOnCard(evt));
@@ -23,6 +23,24 @@ class Game{
 
   startGame(){
     this.renderHand(this.human.hand);
+    this.takeTurn(this.turnorder[0])
+  }
+
+
+  takeTurn(player){
+    this.turnorder.shift();
+    if (player !== this.human )
+      setTimeout(function(){ this.computerPlayerTurn(player); }.bind(this), 1000);
+    }
+
+
+  computerPlayerTurn(player){
+
+    let playedCard = player.takeTurn(this.count);
+    this.addToCount(playedCard);
+    player.receiveCard(this.deck.take(1));
+    this.turnorder.push(player)
+    this.takeTurn(this.turnorder[0])
   }
 
   addToCount(card){
@@ -47,19 +65,19 @@ class Game{
       let cardimg = new Image();
       cardimg.src = `./PNG/${hand[0].name}.png`
       cardimg.onload = function(){
-        this.ctx.drawImage(cardimg, 120 , 520 , cardimg.width * 0.15, cardimg.height * 0.15);
+      this.ctx.drawImage(cardimg, 120 , 520 , cardimg.width * 0.15, cardimg.height * 0.15);
       }.bind(this);
 
       let cardimg2 = new Image();
       cardimg2.src = `./PNG/${hand[1].name}.png`
       cardimg2.onload = function(){
-        this.ctx.drawImage(cardimg2, 222 , 520 , cardimg2.width * 0.15, cardimg2.height * 0.15);
+      this.ctx.drawImage(cardimg2, 222 , 520 , cardimg2.width * 0.15, cardimg2.height * 0.15);
       }.bind(this);
 
       let cardimg3 = new Image();
       cardimg3.src = `./PNG/${hand[2].name}.png`
       cardimg3.onload = function(){
-        this.ctx.drawImage(cardimg3, 324 , 520 , cardimg3.width * 0.15, cardimg3.height * 0.15);
+      this.ctx.drawImage(cardimg3, 324 , 520 , cardimg3.width * 0.15, cardimg3.height * 0.15);
       }.bind(this);
   }
 
@@ -72,31 +90,27 @@ class Game{
       let playedCard = this.human.playCard(0,this.deck.take(1))
       this.addToCount(playedCard);
       this.renderHand(this.human.hand);
-      setTimeout(function(){ this.computerPlayerTurn(); }.bind(this), 1000);
-      ;
+      this.turnorder.push(this.human);
+      this.takeTurn(this.turnorder[0]);
     }
     if( (x>240 && y>530) && (x<336 && y<629) ){
       let playedCard = this.human.playCard(1,this.deck.take(1))
       this.addToCount(playedCard);
       this.renderHand(this.human.hand);
-      setTimeout(function(){ this.computerPlayerTurn(); }.bind(this), 1000);
+      this.turnorder.push(this.human);
+      this.takeTurn(this.turnorder[0]);
       }
     if( (x>339 && y>530) && (x<437 && y<629) ){
       let playedCard = this.human.playCard(2,this.deck.take(1))
       this.addToCount(playedCard);
       this.renderHand(this.human.hand);
-      setTimeout(function(){ this.computerPlayerTurn(); }.bind(this), 1000);
+      this.turnorder.push(this.human);
+      this.takeTurn(this.turnorder[0]);
       }
 
   }
 
 
-  computerPlayerTurn(){
-
-    let playedCard = this.computer1.takeTurn(this.count);
-    this.addToCount(playedCard);
-    this.computer1.receiveCard(this.deck.take(1));
-  }
 
   // startGame(){
   //   while(this.turnorder.length > 1){

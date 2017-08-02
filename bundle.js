@@ -109,7 +109,7 @@ var Game = function () {
     this.computer1 = new ComputerPlayer(this.deck.take(3));
     this.computer2 = new ComputerPlayer(this.deck.take(3));
     this.human = new HumanPlayer(this.deck.take(3));
-    this.turnorder = [this.computer1, this.computer2];
+    this.turnorder = [this.human, this.computer1, this.computer2];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
     this.canvasEl.addEventListener("click", function (evt) {
@@ -123,6 +123,25 @@ var Game = function () {
     key: "startGame",
     value: function startGame() {
       this.renderHand(this.human.hand);
+      this.takeTurn(this.turnorder[0]);
+    }
+  }, {
+    key: "takeTurn",
+    value: function takeTurn(player) {
+      this.turnorder.shift();
+      if (player !== this.human) setTimeout(function () {
+        this.computerPlayerTurn(player);
+      }.bind(this), 1000);
+    }
+  }, {
+    key: "computerPlayerTurn",
+    value: function computerPlayerTurn(player) {
+
+      var playedCard = player.takeTurn(this.count);
+      this.addToCount(playedCard);
+      player.receiveCard(this.deck.take(1));
+      this.turnorder.push(player);
+      this.takeTurn(this.turnorder[0]);
     }
   }, {
     key: "addToCount",
@@ -173,35 +192,23 @@ var Game = function () {
         var playedCard = this.human.playCard(0, this.deck.take(1));
         this.addToCount(playedCard);
         this.renderHand(this.human.hand);
-        setTimeout(function () {
-          this.computerPlayerTurn();
-        }.bind(this), 1000);
-        ;
+        this.turnorder.push(this.human);
+        this.takeTurn(this.turnorder[0]);
       }
       if (x > 240 && y > 530 && x < 336 && y < 629) {
         var _playedCard = this.human.playCard(1, this.deck.take(1));
         this.addToCount(_playedCard);
         this.renderHand(this.human.hand);
-        setTimeout(function () {
-          this.computerPlayerTurn();
-        }.bind(this), 1000);
+        this.turnorder.push(this.human);
+        this.takeTurn(this.turnorder[0]);
       }
       if (x > 339 && y > 530 && x < 437 && y < 629) {
         var _playedCard2 = this.human.playCard(2, this.deck.take(1));
         this.addToCount(_playedCard2);
         this.renderHand(this.human.hand);
-        setTimeout(function () {
-          this.computerPlayerTurn();
-        }.bind(this), 1000);
+        this.turnorder.push(this.human);
+        this.takeTurn(this.turnorder[0]);
       }
-    }
-  }, {
-    key: "computerPlayerTurn",
-    value: function computerPlayerTurn() {
-
-      var playedCard = this.computer1.takeTurn(this.count);
-      this.addToCount(playedCard);
-      this.computer1.receiveCard(this.deck.take(1));
     }
 
     // startGame(){
