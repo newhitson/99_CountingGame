@@ -105,9 +105,8 @@ var Game = function () {
 
     this.deck = new Deck();
     this.count = 0;
-    // this.humanPlayer = new HumanPlayer(this.deck.take(3));
-    this.computer1 = new ComputerPlayer(this.deck.take(3));
-    this.computer2 = new ComputerPlayer(this.deck.take(3));
+    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 150]);
+    this.computer2 = new ComputerPlayer(this.deck.take(3), [500, 150]);
     this.human = new HumanPlayer(this.deck.take(3));
     this.turnorder = [this.human, this.computer1, this.computer2];
     this.ctx = ctx;
@@ -115,69 +114,91 @@ var Game = function () {
     this.canvasEl.addEventListener("click", function (evt) {
       return _this.clickOnCard(evt);
     });
-    // this.renderHand = this.renderHand.bind(this)
-    // this.humanPlayer,
   }
 
   _createClass(Game, [{
     key: "startGame",
     value: function startGame() {
-      this.renderHand(this.human.hand);
+      this.renderGame();
       this.takeTurn(this.turnorder[0]);
     }
   }, {
     key: "takeTurn",
     value: function takeTurn(player) {
+      this.isGameOver();
       this.turnorder.shift();
-      if (player !== this.human) setTimeout(function () {
-        this.computerPlayerTurn(player);
-      }.bind(this), 1000);
+      if (player !== this.human) {
+        setTimeout(function () {
+          this.computerPlayerTurn(player);
+        }.bind(this), 1000);
+      } else {}
+    }
+  }, {
+    key: "isGameOver",
+    value: function isGameOver() {
+      if (this.count > 99) {
+        this.ctx.font = '64px serif';
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.fillText("You Lose", 470, 100);
+      }
     }
   }, {
     key: "computerPlayerTurn",
     value: function computerPlayerTurn(player) {
-
       var playedCard = player.takeTurn(this.count);
-      this.addToCount(playedCard);
-      player.receiveCard(this.deck.take(1));
-      this.turnorder.push(player);
-      this.takeTurn(this.turnorder[0]);
+      if (playedCard !== "bust") {
+        this.addToCount(playedCard);
+        player.receiveCard(this.deck.take(1));
+        this.turnorder.push(player);
+        this.takeTurn(this.turnorder[0]);
+      } else {
+        player.receiveCard(this.deck.take(1));
+        this.takeTurn(this.turnorder[0]);
+      }
     }
   }, {
     key: "addToCount",
     value: function addToCount(card) {
       console.log(card.value);
       var value = void 0;
-
       if (card.value === 'J') {
         value = 99 - this.count;
       } else {
         value = card.gameValue();
       }
-
       this.count = this.count + value;
+      this.renderGame();
+    }
+  }, {
+    key: "renderGame",
+    value: function renderGame() {
+      this.renderCount();
+      this.renderHand();
+    }
+  }, {
+    key: "renderCount",
+    value: function renderCount() {
       this.ctx.font = '48px serif';
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.fillText("" + this.count, 470, 100);
-      this.renderHand(this.human.hand);
     }
   }, {
     key: "renderHand",
-    value: function renderHand(hand) {
+    value: function renderHand() {
       var cardimg = new Image();
-      cardimg.src = "./PNG/" + hand[0].name + ".png";
+      cardimg.src = "./PNG/" + this.human.hand[0].name + ".png";
       cardimg.onload = function () {
         this.ctx.drawImage(cardimg, 120, 520, cardimg.width * 0.15, cardimg.height * 0.15);
       }.bind(this);
 
       var cardimg2 = new Image();
-      cardimg2.src = "./PNG/" + hand[1].name + ".png";
+      cardimg2.src = "./PNG/" + this.human.hand[1].name + ".png";
       cardimg2.onload = function () {
         this.ctx.drawImage(cardimg2, 222, 520, cardimg2.width * 0.15, cardimg2.height * 0.15);
       }.bind(this);
 
       var cardimg3 = new Image();
-      cardimg3.src = "./PNG/" + hand[2].name + ".png";
+      cardimg3.src = "./PNG/" + this.human.hand[2].name + ".png";
       cardimg3.onload = function () {
         this.ctx.drawImage(cardimg3, 324, 520, cardimg3.width * 0.15, cardimg3.height * 0.15);
       }.bind(this);
@@ -190,55 +211,27 @@ var Game = function () {
 
       if (x > 137 && y > 530 && x < 232 && y < 629) {
         var playedCard = this.human.playCard(0, this.deck.take(1));
+        // this.canvasEl.removeEventListener("click", evt => this.clickOnCard(evt));
         this.addToCount(playedCard);
-        this.renderHand(this.human.hand);
+        this.renderGame();
         this.turnorder.push(this.human);
         this.takeTurn(this.turnorder[0]);
       }
       if (x > 240 && y > 530 && x < 336 && y < 629) {
         var _playedCard = this.human.playCard(1, this.deck.take(1));
         this.addToCount(_playedCard);
-        this.renderHand(this.human.hand);
+        this.renderGame();
         this.turnorder.push(this.human);
         this.takeTurn(this.turnorder[0]);
       }
       if (x > 339 && y > 530 && x < 437 && y < 629) {
         var _playedCard2 = this.human.playCard(2, this.deck.take(1));
         this.addToCount(_playedCard2);
-        this.renderHand(this.human.hand);
+        this.renderGame();
         this.turnorder.push(this.human);
         this.takeTurn(this.turnorder[0]);
       }
     }
-
-    // startGame(){
-    //   while(this.turnorder.length > 1){
-    //     let currentPlayer = this.turnorder.pop()
-    //     let play = currentPlayer.takeTurn(this.count)
-    //     if (play === "bust") { console.log("busted");} else {
-    //       switch (play.value) {
-    //         case '4':
-    //         console.log();
-    //           this.turnorder.reverse();
-    //           break;
-    //         case 'J':
-    //           console.log("jack");
-    //           this.count = 99
-    //           break;
-    //         default:
-    //       }
-    //       this.count = this.count + play.gameValue()
-    //       currentPlayer.hand.push(this.deck.take(1)[0])
-    //       this.turnorder.unshift(currentPlayer)
-    //       this.ctx.font = '48px serif';
-    //       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //       this.ctx.fillText(`${this.count}`, 470, 100);
-    //       this.renderHand();
-    //     }
-    //   }
-    // }
-
-
   }]);
 
   return Game;
@@ -334,8 +327,17 @@ var Deck = function () {
       for (var i = 0; i < n; i++) {
         taken.push(this.cards.shift());
       }
+      this.outOfCards();
       return taken;
       //returns cards in a array
+    }
+  }, {
+    key: 'outOfCards',
+    value: function outOfCards() {
+      if (this.cards.length === 0) {
+        var shuffleUp = new Deck();
+        this.cards = shuffleUp.cards;
+      }
     }
   }]);
 
@@ -387,10 +389,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ComputerPlayer = function () {
-  function ComputerPlayer(startinghand) {
+  function ComputerPlayer(startinghand, location) {
     _classCallCheck(this, ComputerPlayer);
 
     this.hand = startinghand;
+    this.location = location;
   }
 
   _createClass(ComputerPlayer, [{

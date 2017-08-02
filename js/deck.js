@@ -27,9 +27,18 @@ class Deck {
   for (var i = 0; i < n; i++) {
     taken.push(this.cards.shift());
   }
+  this.outOfCards();
   return taken;
   //returns cards in a array
  }
+
+ outOfCards(){
+   if (this.cards.length === 0){
+      let shuffleUp = new Deck
+      this.cards = shuffleUp.cards
+   }
+ }
+
 }
 
 module.exports = Deck;
