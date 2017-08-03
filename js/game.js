@@ -42,6 +42,7 @@ class Game{
       this.ctx.font = '64px serif';
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.fillText(`You Win`, 470, 100);
+      this.human.score = this.human.score + 1;
       this.playAgain();
     }else{
       this.takeTurn(this.turnorder[0])
@@ -97,6 +98,7 @@ class Game{
     this.renderCount();
     this.renderHand();
     this.renderPlayers();
+    this.renderScore();
   }
 
 
@@ -191,7 +193,27 @@ class Game{
 
     if( (x>286 && y>332) && (x<637 && y<475) ){
       this.canvasEl.removeEventListener("click", this.clickOnButton);
-      console.log('here');
+      this.human.hand = this.deck.take(3);
+      this.count = 0;
+      this.turnorder = [this.human, this.computer1, this.computer2 ];
+      this.startGame();
+    }
+  }
+
+  renderScore(){
+    let beans = this.human.score
+    if (beans === 1){
+      let bean = new Image();
+      bean.src = `./PNG/coffee_bean.png`
+      bean.onload = function(){
+      this.ctx.drawImage(bean, 374 + beans * 100 , 570 , bean.width * 0.15, bean.height * 0.15);
+      }.bind(this);
+    } else if (beans > 1) {
+      let bean = new Image();
+      bean.src = `./PNG/coffee_bean.png`
+      bean.onload = function(){
+      this.ctx.drawImage(bean, 374 + beans * 100 , 570 , bean.width * 0.15, bean.height * 0.15);
+      }.bind(this);
     }
   }
 

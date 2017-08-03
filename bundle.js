@@ -177,6 +177,7 @@ var Game = function () {
         this.ctx.font = '64px serif';
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.fillText("You Win", 470, 100);
+        this.human.score = this.human.score + 1;
         this.playAgain();
       } else {
         this.takeTurn(this.turnorder[0]);
@@ -234,6 +235,7 @@ var Game = function () {
       this.renderCount();
       this.renderHand();
       this.renderPlayers();
+      this.renderScore();
     }
   }, {
     key: "renderPlayers",
@@ -328,7 +330,28 @@ var Game = function () {
 
       if (x > 286 && y > 332 && x < 637 && y < 475) {
         this.canvasEl.removeEventListener("click", this.clickOnButton);
-        console.log('here');
+        this.human.hand = this.deck.take(3);
+        this.count = 0;
+        this.turnorder = [this.human, this.computer1, this.computer2];
+        this.startGame();
+      }
+    }
+  }, {
+    key: "renderScore",
+    value: function renderScore() {
+      var beans = this.human.score;
+      if (beans === 1) {
+        var bean = new Image();
+        bean.src = "./PNG/coffee_bean.png";
+        bean.onload = function () {
+          this.ctx.drawImage(bean, 374 + beans * 100, 570, bean.width * 0.15, bean.height * 0.15);
+        }.bind(this);
+      } else if (beans > 1) {
+        var _bean = new Image();
+        _bean.src = "./PNG/coffee_bean.png";
+        _bean.onload = function () {
+          this.ctx.drawImage(_bean, 374 + beans * 100, 570, _bean.width * 0.15, _bean.height * 0.15);
+        }.bind(this);
       }
     }
   }]);
