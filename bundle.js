@@ -144,6 +144,7 @@ var Game = function () {
     this.ctx = ctx;
     this.canvasEl = canvasEl;
     this.clickOnCard = this.clickOnCard.bind(this);
+    this.clickOnButton = this.clickOnButton.bind(this);
   }
 
   _createClass(Game, [{
@@ -311,7 +312,25 @@ var Game = function () {
     }
   }, {
     key: "playAgain",
-    value: function playAgain() {}
+    value: function playAgain() {
+      var button = new Image();
+      button.src = "./PNG/button_play_again.png";
+      button.onload = function () {
+        this.ctx.drawImage(button, 250, 270, button.width, button.height);
+      }.bind(this);
+      this.canvasEl.addEventListener("click", this.clickOnButton);
+    }
+  }, {
+    key: "clickOnButton",
+    value: function clickOnButton(event) {
+      var x = event.clientX;
+      var y = event.clientY;
+
+      if (x > 286 && y > 332 && x < 637 && y < 475) {
+        this.canvasEl.removeEventListener("click", this.clickOnButton);
+        console.log('here');
+      }
+    }
   }]);
 
   return Game;

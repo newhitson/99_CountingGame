@@ -15,7 +15,8 @@ class Game{
     this.turnorder = [this.human, this.computer1, this.computer2 ];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
-    this.clickOnCard= this.clickOnCard.bind(this);
+    this.clickOnCard = this.clickOnCard.bind(this);
+    this.clickOnButton = this.clickOnButton.bind(this);
   }
 
   startGame(){
@@ -176,7 +177,22 @@ class Game{
   }
 
   playAgain(){
+    let button = new Image();
+    button.src = `./PNG/button_play_again.png`
+    button.onload = function(){
+    this.ctx.drawImage(button, 250 , 270 , button.width, button.height);
+    }.bind(this);
+    this.canvasEl.addEventListener("click",this.clickOnButton)
+  }
 
+  clickOnButton(event){
+    var x = event.clientX;
+    var y = event.clientY;
+
+    if( (x>286 && y>332) && (x<637 && y<475) ){
+      this.canvasEl.removeEventListener("click", this.clickOnButton);
+      console.log('here');
+    }
   }
 
 }
