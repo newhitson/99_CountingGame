@@ -84,13 +84,6 @@ var Card = function () {
   }
 
   _createClass(Card, [{
-    key: 'listItem',
-    value: function listItem() {
-      var el = document.createElement('li');
-      el.innerText = this.name;
-      return el;
-    }
-  }, {
     key: 'gameValue',
     value: function gameValue() {
       var gameValues = { 'A': 1, '2': 2, '3': 3, '4': 0, '5': 5, '6': 6, '7': 7, '8': 8, '9': 0,
@@ -146,9 +139,9 @@ var Game = function () {
 
     this.deck = new Deck();
     this.count = 0;
-    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 220]);
-    this.computer2 = new ComputerPlayer(this.deck.take(3), [680, 220]);
-    this.human = new HumanPlayer(this.deck.take(3));
+    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 220], "computer 1");
+    this.computer2 = new ComputerPlayer(this.deck.take(3), [680, 220], "comptuer 2");
+    this.human = new HumanPlayer(this.deck.take(3), "Human Player");
     this.turnorder = [this.human, this.computer1, this.computer2];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
@@ -188,15 +181,30 @@ var Game = function () {
     value: function computerPlayerTurn(player) {
       var playedCard = player.takeTurn(this.count);
       if (playedCard !== "bust") {
+        this.renderCard(player, playedCard);
         this.addToCount(playedCard);
-        player.receiveCard(this.deck.take(1));
         this.turnorder.push(player);
-        this.renderGame();
-        this.takeTurn(this.turnorder[0]);
+      }
+      player.receiveCard(this.deck.take(1));
+      this.renderGame();
+      this.takeTurn(this.turnorder[0]);
+    }
+  }, {
+    key: "renderCard",
+    value: function renderCard(player, card) {
+      console.log(player.name);
+      if (player.name === "computer 1") {
+        var cardimg = new Image();
+        cardimg.src = "./PNG/" + card.name + ".png";
+        cardimg.onload = function () {
+          this.ctx.drawImage(cardimg, player.location[0], 120, cardimg.width * 0.05, cardimg.height * 0.05);
+        }.bind(this);
       } else {
-        player.receiveCard(this.deck.take(1));
-        this.renderGame();
-        this.takeTurn(this.turnorder[0]);
+        var cardimg2 = new Image();
+        cardimg2.src = "./PNG/" + card.name + ".png";
+        cardimg2.onload = function () {
+          this.ctx.drawImage(cardimg2, player.location[0], 120, cardimg2.width * 0.05, cardimg2.height * 0.05);
+        }.bind(this);
       }
     }
   }, {
@@ -375,11 +383,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var HumanPlayer = function () {
-  function HumanPlayer(startinghand) {
+  function HumanPlayer(startinghand, name) {
     _classCallCheck(this, HumanPlayer);
 
     this.hand = startinghand;
     this.score = 0;
+    this.name;
   }
 
   _createClass(HumanPlayer, [{
@@ -407,11 +416,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ComputerPlayer = function () {
-  function ComputerPlayer(startinghand, location) {
+  function ComputerPlayer(startinghand, location, name) {
     _classCallCheck(this, ComputerPlayer);
 
     this.hand = startinghand;
     this.location = location;
+    this.name = name;
   }
 
   _createClass(ComputerPlayer, [{

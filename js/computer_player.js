@@ -1,7 +1,8 @@
 class ComputerPlayer{
-  constructor(startinghand, location){
+  constructor(startinghand, location, name){
     this.hand = startinghand
     this.location = location
+    this.name = name
   }
 
   takeTurn(count){

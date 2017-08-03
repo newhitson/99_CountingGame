@@ -1,7 +1,8 @@
 class HumanPlayer{
-  constructor(startinghand){
+  constructor(startinghand, name){
     this.hand = startinghand;
     this.score = 0;
+    this.name
   }
 
   playCard(pos, newcard){

@@ -9,9 +9,9 @@ class Game{
   constructor(ctx, canvasEl){
     this.deck = new Deck;
     this.count = 0;
-    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 220]);
-    this.computer2 = new ComputerPlayer(this.deck.take(3),[680, 220]);
-    this.human = new HumanPlayer(this.deck.take(3));
+    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 220], "computer 1");
+    this.computer2 = new ComputerPlayer(this.deck.take(3),[680, 220], "comptuer 2" );
+    this.human = new HumanPlayer(this.deck.take(3), "Human Player");
     this.turnorder = [this.human, this.computer1, this.computer2 ];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
@@ -32,7 +32,7 @@ class Game{
     }
 
   isGameOver(){
-    if (this.count > 99){
+    if(this.count > 99){
       this.ctx.font = '64px serif';
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.fillText(`You Lose`, 470, 100);
@@ -42,16 +42,30 @@ class Game{
   computerPlayerTurn(player){
     let playedCard = player.takeTurn(this.count);
     if (playedCard !== "bust") {
+      this.renderCard(player, playedCard);
       this.addToCount(playedCard);
-      player.receiveCard(this.deck.take(1));
       this.turnorder.push(player)
-      this.renderGame();
-      this.takeTurn(this.turnorder[0])
-    } else {
+    }
       player.receiveCard(this.deck.take(1));
       this.renderGame();
       this.takeTurn(this.turnorder[0])
-    }
+  }
+
+  renderCard(player, card){
+    console.log(player.name);
+    if (player.name === "computer 1" ){
+      let cardimg = new Image();
+      cardimg.src = `./PNG/${card.name}.png`
+      cardimg.onload = function(){
+      this.ctx.drawImage(cardimg, player.location[0] , 120 , cardimg.width * 0.05, cardimg.height * 0.05);
+      }.bind(this);
+    }else {
+    let cardimg2 = new Image();
+    cardimg2.src = `./PNG/${card.name}.png`
+    cardimg2.onload = function(){
+    this.ctx.drawImage(cardimg2, player.location[0] , 120 , cardimg2.width * 0.05, cardimg2.height * 0.05);
+    }.bind(this);
+  }
   }
 
 
@@ -73,21 +87,21 @@ class Game{
   }
 
 
-    renderPlayers(){
-      this.turnorder.forEach((player) => {
-        if (player !== this.human){
-          let cardimg = new Image();
-          cardimg.src = `./PNG/hand.png`
-          cardimg.onload = function(){
-            this.ctx.drawImage(cardimg,
-                                player.location[0]
-                                ,player.location[1]
-                                ,cardimg.width * 0.15,
-                                cardimg.height * 0.15);
-          }.bind(this)
-        }
-      });
-    }
+  renderPlayers(){
+    this.turnorder.forEach((player) => {
+      if (player !== this.human){
+        let cardimg = new Image();
+        cardimg.src = `./PNG/hand.png`
+        cardimg.onload = function(){
+          this.ctx.drawImage(cardimg,
+                              player.location[0]
+                              ,player.location[1]
+                              ,cardimg.width * 0.15,
+                              cardimg.height * 0.15);
+        }.bind(this)
+      }
+    });
+  }
 
 
   renderCount(){
@@ -98,23 +112,23 @@ class Game{
 
 
   renderHand(){
-      let cardimg = new Image();
-      cardimg.src = `./PNG/${this.human.hand[0].name}.png`
-      cardimg.onload = function(){
-      this.ctx.drawImage(cardimg, 120 , 520 , cardimg.width * 0.15, cardimg.height * 0.15);
-      }.bind(this);
+    let cardimg = new Image();
+    cardimg.src = `./PNG/${this.human.hand[0].name}.png`
+    cardimg.onload = function(){
+    this.ctx.drawImage(cardimg, 120 , 520 , cardimg.width * 0.15, cardimg.height * 0.15);
+    }.bind(this);
 
-      let cardimg2 = new Image();
-      cardimg2.src = `./PNG/${this.human.hand[1].name}.png`
-      cardimg2.onload = function(){
-      this.ctx.drawImage(cardimg2, 222 , 520 , cardimg2.width * 0.15, cardimg2.height * 0.15);
-      }.bind(this);
+    let cardimg2 = new Image();
+    cardimg2.src = `./PNG/${this.human.hand[1].name}.png`
+    cardimg2.onload = function(){
+    this.ctx.drawImage(cardimg2, 222 , 520 , cardimg2.width * 0.15, cardimg2.height * 0.15);
+    }.bind(this);
 
-      let cardimg3 = new Image();
-      cardimg3.src = `./PNG/${this.human.hand[2].name}.png`
-      cardimg3.onload = function(){
-      this.ctx.drawImage(cardimg3, 324 , 520 , cardimg3.width * 0.15, cardimg3.height * 0.15);
-      }.bind(this);
+    let cardimg3 = new Image();
+    cardimg3.src = `./PNG/${this.human.hand[2].name}.png`
+    cardimg3.onload = function(){
+    this.ctx.drawImage(cardimg3, 324 , 520 , cardimg3.width * 0.15, cardimg3.height * 0.15);
+    }.bind(this);
   }
 
 
@@ -145,8 +159,6 @@ class Game{
       this.takeTurn(this.turnorder[0]);
       }
   }
-
-
 
 }
 module.exports = Game;
