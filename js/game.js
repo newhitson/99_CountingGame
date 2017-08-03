@@ -9,8 +9,8 @@ class Game{
   constructor(ctx, canvasEl){
     this.deck = new Deck;
     this.count = 0;
-    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 150]);
-    this.computer2 = new ComputerPlayer(this.deck.take(3),[500, 150]);
+    this.computer1 = new ComputerPlayer(this.deck.take(3), [150, 220]);
+    this.computer2 = new ComputerPlayer(this.deck.take(3),[680, 220]);
     this.human = new HumanPlayer(this.deck.take(3));
     this.turnorder = [this.human, this.computer1, this.computer2 ];
     this.ctx = ctx;
@@ -45,9 +45,11 @@ class Game{
       this.addToCount(playedCard);
       player.receiveCard(this.deck.take(1));
       this.turnorder.push(player)
+      this.renderGame();
       this.takeTurn(this.turnorder[0])
     } else {
       player.receiveCard(this.deck.take(1));
+      this.renderGame();
       this.takeTurn(this.turnorder[0])
     }
   }
@@ -62,13 +64,30 @@ class Game{
        value = card.gameValue();
     }
     this.count = this.count + value;
-    this.renderGame();
   }
 
   renderGame(){
     this.renderCount();
     this.renderHand();
+    this.renderPlayers();
   }
+
+
+    renderPlayers(){
+      this.turnorder.forEach((player) => {
+        if (player !== this.human){
+          let cardimg = new Image();
+          cardimg.src = `./PNG/hand.png`
+          cardimg.onload = function(){
+            this.ctx.drawImage(cardimg,
+                                player.location[0]
+                                ,player.location[1]
+                                ,cardimg.width * 0.15,
+                                cardimg.height * 0.15);
+          }.bind(this)
+        }
+      });
+    }
 
 
   renderCount(){
