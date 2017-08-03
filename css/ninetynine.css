@@ -6,3 +6,8 @@ canvas{
 body{
 
 }
+
+img
+{
+    box-shadow: 0px 0px 5px #fff;
+}

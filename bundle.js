@@ -133,8 +133,6 @@ var ComputerPlayer = __webpack_require__(5);
 
 var Game = function () {
   function Game(ctx, canvasEl) {
-    var _this = this;
-
     _classCallCheck(this, Game);
 
     this.deck = new Deck();
@@ -145,9 +143,7 @@ var Game = function () {
     this.turnorder = [this.human, this.computer1, this.computer2];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
-    this.canvasEl.addEventListener("click", function (evt) {
-      return _this.clickOnCard(evt);
-    });
+    this.clickOnCard = this.clickOnCard.bind(this);
   }
 
   _createClass(Game, [{
@@ -159,13 +155,14 @@ var Game = function () {
   }, {
     key: "takeTurn",
     value: function takeTurn(player) {
-      this.isGameOver();
       this.turnorder.shift();
       if (player !== this.human) {
         setTimeout(function () {
           this.computerPlayerTurn(player);
         }.bind(this), 1000);
-      } else {}
+      } else {
+        this.canvasEl.addEventListener("click", this.clickOnCard);
+      }
     }
   }, {
     key: "isGameOver",
@@ -174,6 +171,14 @@ var Game = function () {
         this.ctx.font = '64px serif';
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.fillText("You Lose", 470, 100);
+        this.playAgain();
+      } else if (this.turnorder.length === 1) {
+        this.ctx.font = '64px serif';
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.fillText("You Win", 470, 100);
+        this.playAgain();
+      } else {
+        this.takeTurn(this.turnorder[0]);
       }
     }
   }, {
@@ -187,7 +192,7 @@ var Game = function () {
       }
       player.receiveCard(this.deck.take(1));
       this.renderGame();
-      this.takeTurn(this.turnorder[0]);
+      this.isGameOver();
     }
   }, {
     key: "renderCard",
@@ -214,6 +219,9 @@ var Game = function () {
       var value = void 0;
       if (card.value === 'J') {
         value = 99 - this.count;
+      } else if (card.value === '4') {
+        this.turnorder.reverse();
+        value = card.gameValue();
       } else {
         value = card.gameValue();
       }
@@ -229,15 +237,15 @@ var Game = function () {
   }, {
     key: "renderPlayers",
     value: function renderPlayers() {
-      var _this2 = this;
+      var _this = this;
 
       this.turnorder.forEach(function (player) {
-        if (player !== _this2.human) {
+        if (player !== _this.human) {
           var cardimg = new Image();
           cardimg.src = "./PNG/hand.png";
           cardimg.onload = function () {
             this.ctx.drawImage(cardimg, player.location[0], player.location[1], cardimg.width * 0.15, cardimg.height * 0.15);
-          }.bind(_this2);
+          }.bind(_this);
         }
       });
     }
@@ -277,27 +285,33 @@ var Game = function () {
 
       if (x > 137 && y > 530 && x < 232 && y < 629) {
         var playedCard = this.human.playCard(0, this.deck.take(1));
+        this.canvasEl.removeEventListener("click", this.clickOnCard);
         // this.canvasEl.removeEventListener("click", evt => this.clickOnCard(evt));
         this.addToCount(playedCard);
         this.renderGame();
         this.turnorder.push(this.human);
-        this.takeTurn(this.turnorder[0]);
+        this.isGameOver();
       }
       if (x > 240 && y > 530 && x < 336 && y < 629) {
         var _playedCard = this.human.playCard(1, this.deck.take(1));
+        this.canvasEl.removeEventListener("click", this.clickOnCard);
         this.addToCount(_playedCard);
         this.renderGame();
         this.turnorder.push(this.human);
-        this.takeTurn(this.turnorder[0]);
+        this.isGameOver();;
       }
       if (x > 339 && y > 530 && x < 437 && y < 629) {
         var _playedCard2 = this.human.playCard(2, this.deck.take(1));
+        this.canvasEl.removeEventListener("click", this.clickOnCard);
         this.addToCount(_playedCard2);
         this.renderGame();
         this.turnorder.push(this.human);
-        this.takeTurn(this.turnorder[0]);
+        this.isGameOver();;
       }
     }
+  }, {
+    key: "playAgain",
+    value: function playAgain() {}
   }]);
 
   return Game;

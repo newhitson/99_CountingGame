@@ -15,7 +15,7 @@ class Game{
     this.turnorder = [this.human, this.computer1, this.computer2 ];
     this.ctx = ctx;
     this.canvasEl = canvasEl;
-    this.canvasEl.addEventListener("click", evt => this.clickOnCard(evt));
+    this.clickOnCard= this.clickOnCard.bind(this);
   }
 
   startGame(){
@@ -24,10 +24,10 @@ class Game{
   }
 
   takeTurn(player){
-    this.isGameOver();
     this.turnorder.shift();
     if (player !== this.human ) {
       setTimeout(function(){ this.computerPlayerTurn(player); }.bind(this), 1000); } else {
+        this.canvasEl.addEventListener("click",this.clickOnCard);
       }
     }
 
@@ -36,7 +36,16 @@ class Game{
       this.ctx.font = '64px serif';
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.fillText(`You Lose`, 470, 100);
+      this.playAgain();
+    } else if( this.turnorder.length === 1 ) {
+      this.ctx.font = '64px serif';
+      this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+      this.ctx.fillText(`You Win`, 470, 100);
+      this.playAgain();
+    }else{
+      this.takeTurn(this.turnorder[0])
     }
+
   }
 
   computerPlayerTurn(player){
@@ -48,7 +57,7 @@ class Game{
     }
       player.receiveCard(this.deck.take(1));
       this.renderGame();
-      this.takeTurn(this.turnorder[0])
+      this.isGameOver();
   }
 
   renderCard(player, card){
@@ -59,12 +68,12 @@ class Game{
       cardimg.onload = function(){
       this.ctx.drawImage(cardimg, player.location[0] , 120 , cardimg.width * 0.05, cardimg.height * 0.05);
       }.bind(this);
-    }else {
-    let cardimg2 = new Image();
-    cardimg2.src = `./PNG/${card.name}.png`
-    cardimg2.onload = function(){
-    this.ctx.drawImage(cardimg2, player.location[0] , 120 , cardimg2.width * 0.05, cardimg2.height * 0.05);
-    }.bind(this);
+      } else {
+      let cardimg2 = new Image();
+      cardimg2.src = `./PNG/${card.name}.png`
+      cardimg2.onload = function(){
+      this.ctx.drawImage(cardimg2, player.location[0] , 120 , cardimg2.width * 0.05, cardimg2.height * 0.05);
+      }.bind(this);
   }
   }
 
@@ -74,6 +83,9 @@ class Game{
     let value;
     if (card.value === 'J') {
        value = 99 - this.count;
+    } else if( card.value === '4'){
+      this.turnorder.reverse();
+      value = card.gameValue();
     } else {
        value = card.gameValue();
     }
@@ -138,26 +150,33 @@ class Game{
 
     if( (x>137 && y>530) && (x<232 && y<629) ){
       let playedCard = this.human.playCard(0,this.deck.take(1))
+      this.canvasEl.removeEventListener("click", this.clickOnCard);
       // this.canvasEl.removeEventListener("click", evt => this.clickOnCard(evt));
       this.addToCount(playedCard);
       this.renderGame();
       this.turnorder.push(this.human);
-      this.takeTurn(this.turnorder[0]);
+      this.isGameOver();
     }
     if( (x>240 && y>530) && (x<336 && y<629) ){
       let playedCard = this.human.playCard(1,this.deck.take(1))
+      this.canvasEl.removeEventListener("click", this.clickOnCard);
       this.addToCount(playedCard);
       this.renderGame();
       this.turnorder.push(this.human);
-      this.takeTurn(this.turnorder[0]);
+      this.isGameOver();;
       }
     if( (x>339 && y>530) && (x<437 && y<629) ){
       let playedCard = this.human.playCard(2,this.deck.take(1))
+      this.canvasEl.removeEventListener("click", this.clickOnCard);
       this.addToCount(playedCard);
       this.renderGame();
       this.turnorder.push(this.human);
-      this.takeTurn(this.turnorder[0]);
+      this.isGameOver();;
       }
+  }
+
+  playAgain(){
+
   }
 
 }
