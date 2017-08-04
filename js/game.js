@@ -39,9 +39,11 @@ class Game{
       this.ctx.fillText(`You Lose`, 470, 100);
       this.playAgain();
     } else if( this.turnorder.length === 1 ) {
+
       this.ctx.font = '64px serif';
       this.ctx.clearRect(0, 0, canvas.width, canvas.height);
       this.ctx.fillText(`You Win`, 470, 100);
+
       this.human.score = this.human.score + 1;
       this.playAgain();
     }else{
