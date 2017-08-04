@@ -204,13 +204,13 @@ var Game = function () {
         var cardimg = new Image();
         cardimg.src = "./PNG/" + card.name + ".png";
         cardimg.onload = function () {
-          this.ctx.drawImage(cardimg, player.location[0], 120, cardimg.width * 0.05, cardimg.height * 0.05);
+          this.ctx.drawImage(cardimg, player.location[0], 120, cardimg.width * 0.09, cardimg.height * 0.09);
         }.bind(this);
       } else {
         var cardimg2 = new Image();
         cardimg2.src = "./PNG/" + card.name + ".png";
         cardimg2.onload = function () {
-          this.ctx.drawImage(cardimg2, player.location[0], 120, cardimg2.width * 0.05, cardimg2.height * 0.05);
+          this.ctx.drawImage(cardimg2, player.location[0], 120, cardimg2.width * 0.09, cardimg2.height * 0.09);
         }.bind(this);
       }
     }
@@ -351,13 +351,19 @@ var Game = function () {
         var bean = new Image();
         bean.src = "./PNG/coffee_bean.png";
         bean.onload = function () {
-          this.ctx.drawImage(bean, 374 + beans * 100, 570, bean.width * 0.15, bean.height * 0.15);
+          this.ctx.drawImage(bean, 474, 570, bean.width * 0.15, bean.height * 0.15);
         }.bind(this);
-      } else if (beans > 1) {
+      } else if (beans === 2) {
         var _bean = new Image();
-        _bean.src = "./PNG/coffee_bean.png";
+        _bean.src = "./PNG/french_press.png";
         _bean.onload = function () {
-          this.ctx.drawImage(_bean, 374 + beans * 100, 570, _bean.width * 0.15, _bean.height * 0.15);
+          this.ctx.drawImage(_bean, 440, 520, _bean.width * 0.2, _bean.height * 0.2);
+        }.bind(this);
+      } else if (beans > 2) {
+        var _bean2 = new Image();
+        _bean2.src = "./PNG/plant.png";
+        _bean2.onload = function () {
+          this.ctx.drawImage(_bean2, 460, 520, _bean2.width * 0.37, _bean2.height * 0.37);
         }.bind(this);
       }
     }
