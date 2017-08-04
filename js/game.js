@@ -148,10 +148,18 @@ class Game{
 
 
   clickOnCard(event){
+
+
+    let top = this.canvasEl.offsetTop
+    console.log(top);
+    let elLeft = this.canvasEl.offsetLeft
+    console.log(elLeft);
     var x = event.clientX;
     var y = event.clientY;
-
-    if( (x>137 && y>530) && (x<232 && y<629) ){
+    console.log(event);
+    console.log(x);
+    console.log(y);
+    if( (x>195 && y>580) && (x<295 && y<688) ){
       let playedCard = this.human.playCard(0,this.deck.take(1))
       this.canvasEl.removeEventListener("click", this.clickOnCard);
       // this.canvasEl.removeEventListener("click", evt => this.clickOnCard(evt));
@@ -160,7 +168,7 @@ class Game{
       this.turnorder.push(this.human);
       this.isGameOver();
     }
-    if( (x>240 && y>530) && (x<336 && y<629) ){
+    if( (x>296 && y>580) && (x<396 && y<688) ){
       let playedCard = this.human.playCard(1,this.deck.take(1))
       this.canvasEl.removeEventListener("click", this.clickOnCard);
       this.addToCount(playedCard);
@@ -168,7 +176,7 @@ class Game{
       this.turnorder.push(this.human);
       this.isGameOver();;
       }
-    if( (x>339 && y>530) && (x<437 && y<629) ){
+    if( (x>397 && y>585) && (x<496 && y<688) ){
       let playedCard = this.human.playCard(2,this.deck.take(1))
       this.canvasEl.removeEventListener("click", this.clickOnCard);
       this.addToCount(playedCard);
