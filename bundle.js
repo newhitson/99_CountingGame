@@ -199,7 +199,6 @@ var Game = function () {
   }, {
     key: "renderCard",
     value: function renderCard(player, card) {
-      console.log(player.name);
       if (player.name === "computer 1") {
         var cardimg = new Image();
         cardimg.src = "./PNG/" + card.name + ".png";
@@ -217,7 +216,6 @@ var Game = function () {
   }, {
     key: "addToCount",
     value: function addToCount(card) {
-      console.log(card.value);
       var value = void 0;
       if (card.value === 'J') {
         value = 99 - this.count;
@@ -284,15 +282,8 @@ var Game = function () {
     key: "clickOnCard",
     value: function clickOnCard(event) {
 
-      var top = this.canvasEl.offsetTop;
-      console.log(top);
-      var elLeft = this.canvasEl.offsetLeft;
-      console.log(elLeft);
       var x = event.clientX;
       var y = event.clientY;
-      console.log(event);
-      console.log(x);
-      console.log(y);
       if (x > 195 && y > 580 && x < 295 && y < 688) {
         var playedCard = this.human.playCard(0, this.deck.take(1));
         this.canvasEl.removeEventListener("click", this.clickOnCard);

@@ -20,6 +20,19 @@ Ninety Nine is a turn based card game that you play with 2 other computer player
   -[ ] J: Sets the count to 99  
 
 
+  ```Javascript
+  takeTurn(player){
+    this.turnorder.shift();
+    if (player !== this.human ) {
+      setTimeout(function(){ this.computerPlayerTurn(player); }.bind(this), 1000); } else {
+        this.canvasEl.addEventListener("click",this.clickOnCard);
+      }
+    }
+
+
+  ```
+
+
 #### Architecture and Technologies
 - Vanilla Javascript for game logic
 - HTML5 Canvas for rendering and graphics
