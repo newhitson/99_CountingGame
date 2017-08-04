@@ -1,6 +1,6 @@
 ## Ninety Nine
 
-[live](https://newhitson.github.io./)
+[Live](https://newhitson.github.io./)
 
 #### About
 Ninety Nine is a nearly lost card game my dad's godmother learned from gypsies is Norway. I want to preserve and immortalize this game, for which I have found no other computer games made. I build this game with vanilla JavaScript and some help from my friends Webpack, HTML5 and CSS3.
@@ -17,7 +17,7 @@ Ninety Nine is a turn based card game that you play with 2 other computer player
   -[ ] 4: Play order is reversed
   -[ ] 9: PASS
   -[ ] 10: subtracts 10 from the Count
-  -[ ] J: Sets the count to 99  
+  -[ ] JACK: Sets the count to 99  
 
 
 #### Taking Turns in an Asynchronous Environment
