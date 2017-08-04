@@ -160,7 +160,7 @@ var Game = function () {
       if (player !== this.human) {
         setTimeout(function () {
           this.computerPlayerTurn(player);
-        }.bind(this), 1000);
+        }.bind(this), 1200);
       } else {
         this.canvasEl.addEventListener("click", this.clickOnCard);
       }

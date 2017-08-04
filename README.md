@@ -20,7 +20,7 @@ Ninety Nine is a turn based card game that you play with 2 other computer player
   -[ ] J: Sets the count to 99  
 
 
-#### Taking Turns in an asynchronous Environment
+#### Taking Turns in an Asynchronous Environment
 I learned that putting turn logic inside a while loop wouldn't work as well JavaScript as did in Ruby games.  I'm proud of this control flow logic that lets a computer take its turn slow enough for a human to see whats happening but when its a human players turn it waits for a click event.
 
   ```Javascript
@@ -31,8 +31,6 @@ I learned that putting turn logic inside a while loop wouldn't work as well Java
         this.canvasEl.addEventListener("click",this.clickOnCard);
       }
     }
-
-
   ```
 
 
