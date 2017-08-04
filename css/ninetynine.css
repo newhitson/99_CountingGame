@@ -10,11 +10,20 @@ body{
   background:url(http://res.cloudinary.com/dj1l8etr0/raw/upload/v1501868100/370799_eu8gu7.jpg);
 }
 p{
-  margin-left: 35px;
+  font-size: 20px;
+  font-family: Verdana;
+  margin-left: 45px;
+}
+
+hr{
+  border: 0;
+  height: 3px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
 li{
   padding: 5px;
+  font-family: Verdana;
 }
 
 img{
@@ -23,10 +32,11 @@ img{
 
 aside{
   min-width: 300px;
-  max-width: 400px; 
+  max-width: 400px;
   margin-left: 1020px;
   border-style: solid;
   border-width: 5px;
   margin-top: 50px;
   background-image: url("http://res.cloudinary.com/dj1l8etr0/image/upload/v1501868034/illust_cldf1d.jpg");
+
 }
